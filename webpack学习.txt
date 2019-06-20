@@ -1,0 +1,62 @@
+1、入口(entry)
+	module.exports = {
+		entry: './path/to/my/entry/file.js'  // 单入口
+		entry: { // 多入口
+    			product1: './src/modules/product1/main.js',
+    			product2: './src/modules/product2/main.js',
+    		},
+	};
+
+2、出口(output)
+	output 属性告诉 webpack 在哪里输出它所创建的 bundles，以及如何命名这些文件，默认值为 ./dist。
+	module.exports = {
+    entry: './path/to/my/entry/file.js',
+    output: {
+      path: path.resolve(__dirname, 'dist'), // 输出的路径
+      filename: 'my-first-webpack.bundle.js' // 输出时的js命名
+    }
+  }
+  // 多出口打包-打包成多个项目包
+  借助插件 html-webpack-plugins
+  在webpack.prod.conf.js中添加多个plugins  有多少个项目包就添加多少  建议用函数丢进去
+  new HtmlWebpackPlugin({
+		template: 'index.html', // 模板来源文件
+		filename, // 生成的模板的文件名字和路径
+		inject: true, // 注入位置  head body true false  后面两个代表是否全部注入
+		chunksSortMode: 'dependency', // 引入模块的排序方式 这里是以依赖排序
+		chunks: ['manifest', 'vendor', chunkName], // 生成的html引入的js模块 不写的话代表引入所有的
+		minify: {
+			removeComments: true, // 是否大小写敏感
+			collapseWhitespace: true, // 是否使用简写格式  比如标签熟悉 content="" 简写就是 content
+			removeAttributeQuotes: true // 是否去除空格
+		},
+	}),
+	// 多入口打包-指定项目打包
+	按照上面的方法  使用argv这个插件去获取用户命令中指定打包的项目名，然后通过项目名去添加特殊单个的HtmlWebpackPlugin
+
+
+
+
+3、loader：让webpack能够处理非js文件，将所有类型的文件装换成webpack可以处理的有效模块，
+  module: {
+    rules: [
+      { test: /\.txt$/, use: 'raw-loader' }
+    ]
+  }
+
+4、plugins插件：增加插件使项目运行时更加方便
+	const HtmlWebpackPlugin = require('html-webpack-plugin'); // 这个插件是用于在html和css中增加hash值 使每次构建后引入的css文件都不一样，这样可以起到避免清理缓存
+	const config = {
+    plugins: [
+      title:'自动生成自定义标题',//如果使用了模板，就使用模板里的title，这里的title设置会失效，哪怕模板里的title为空
+      template:__dirname + '/public/tempIndex.html',//需要编译的模板,可以是jade等第三方模板引擎也可以说纯html页面
+      filename:'demo.html',//最终生成的文件名,默认是index.html
+      hash:true,//是否给所有包含的js、css文件后面添加hash值,可以用来清除缓存，但好像不是很管用
+      inject:true,// | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中。
+      chunks:['index'] //指定生成的文件demo.hmtl需要包括entry里的哪些入口文件(这里是index,main.js不会引入),不设置的话所以入口js文件都会被引入进来
+    ]
+  };
+
+5、mode：为node提供一个环境参数，根据不同的环境做不同的事情
+
+6、
