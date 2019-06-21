@@ -14,8 +14,8 @@ const webpackConfig = require('./webpack.prod.conf')
 const spinner = ora('building for production...') // 传入加载中文本
 spinner.start() // 开始加载中效果
 
-// 这里是删除一个文件 一般都是删除入口文件index.html
-rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
+// 这里先删除dist文件夹  然后再打包  所有的打包内容都是最新的 也不会出现其他项目中多余无关的文件出现
+rm(path.join(config.build.assetsRoot), err => {
   if (err) throw err
 
   // ★★★★★★★★★★★★★★★★★★★★
@@ -33,7 +33,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
 
     if (stats.hasErrors()) {
       console.log(chalk.red('  Build failed with errors.\n')) // 输入红色的文字  Build failed with errors.
-      process.exit(1)
+      process.exit(1) // 退出进程
     }
     console.log(chalk.cyan('  Build complete.\n')) // 输入青色的文字
     console.log(chalk.yellow( // 输入黄色的文字

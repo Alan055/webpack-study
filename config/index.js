@@ -13,8 +13,8 @@ module.exports = {
     proxyTable: {},
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    host: 'localhost', // 启动时使用的host 也可以用127.0.0.1
+    port: 8080, // 启动的端口号
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -41,9 +41,9 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'+[]),
-    assetsSubDirectory: 'alan',
-    assetsPublicPath: '/',
+    assetsRoot: path.resolve(__dirname, '../dist'), // 打包时所有的文件放在那儿 打包前会删除掉
+    assetsSubDirectory: 'alan', // 打包后的静态资源所放文件夹的名字
+    assetsPublicPath: '/', // 打包后静态资源引用的前缀
 
     /**
      * Source Maps
