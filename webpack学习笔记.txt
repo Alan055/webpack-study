@@ -1,4 +1,4 @@
-1、入口(entry)
+﻿1、入口(entry)
 	module.exports = {
 		entry: './path/to/my/entry/file.js'  // 单入口
 		entry: { // 多入口
@@ -59,4 +59,4 @@
 
 5、mode：为node提供一个环境参数，根据不同的环境做不同的事情
 
-6、
+启动方法和打包方法 请看README.md文件
