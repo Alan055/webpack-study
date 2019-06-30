@@ -10,7 +10,12 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/login/*': {
+        target: 'http://localhost:3000',
+        secure: false
+      },
+    },
 
     // Various Dev Server settings
     host: 'localhost', // 启动时使用的host 也可以用127.0.0.1
