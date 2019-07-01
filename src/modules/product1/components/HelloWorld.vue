@@ -29,6 +29,8 @@
 <script>
   import c1 from "./c1.vue";
   import c2 from "./c2.vue";
+  import md5 from "md5";
+
 
 
   export default {
@@ -44,8 +46,7 @@
     },
     methods: {
       login(){
-        console.log(this.username,this.password)
-        service.getDefault(this,'/api/login',{username:this.username,password:this.password}).then(function(result){
+        service.getDefault(this,'/api/login',{username:this.username,password:md5(this.password)}).then(function(result){
           this.mes = result.data
 
         },function(err){
@@ -53,7 +54,7 @@
         })
       },
       register(){
-        service.getDefault(this,'/api/register',{username:this.username,password:this.password}).then(function(result){
+        service.getDefault(this,'/api/register',{username:this.username,password:md5(this.password)}).then(function(result){
           this.mes1 = result.data
 
         },function(err){
@@ -62,8 +63,6 @@
       }
     },
     created(){
-      console.log(moment().format('MM-DD'))
-      console.log($)
     }
   }
 
