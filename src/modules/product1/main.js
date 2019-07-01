@@ -18,8 +18,6 @@ import service from "./../../js/service";
 
 window.service = service
 
-
-
 Vue.prototype.$eventBus = new Vue()
 
 /* eslint-disable no-new */

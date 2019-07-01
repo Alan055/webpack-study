@@ -3,4 +3,4 @@ npm run dev -- --env=dev --open=product1
 
 # 打包
 全部打包 npm run build
-指定项目打包 npm run build --open=product2
+指定项目打包 npm run build -- --open=product2

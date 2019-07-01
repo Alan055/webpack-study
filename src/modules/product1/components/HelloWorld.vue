@@ -47,8 +47,13 @@
         	console.log(err)
         })
       }
+    },
+    created(){
+      console.log(moment().format('MM-DD'))
+      console.log($)
     }
   }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
