@@ -14,6 +14,10 @@
         <button @click="login()">登录</button>
         <span>{{mes}}</span>
       </div>
+      <div class="item">
+        <button @click="register()">注册</button>
+        <span>{{mes1}}</span>
+      </div>
       <!--<c1></c1>-->
       <!--<c2></c2>-->
     </div>
@@ -35,6 +39,7 @@
         username: '',
         password: '',
         mes: '',
+        mes1: '',
       }
     },
     methods: {
@@ -45,6 +50,14 @@
 
         },function(err){
         	console.log(err)
+        })
+      },
+      register(){
+        service.getDefault(this,'/api/register',{username:this.username,password:this.password}).then(function(result){
+          this.mes1 = result.data
+
+        },function(err){
+          console.log(err)
         })
       }
     },
