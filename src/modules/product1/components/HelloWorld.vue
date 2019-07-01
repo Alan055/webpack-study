@@ -40,7 +40,7 @@
     methods: {
       login(){
         console.log(this.username,this.password)
-        service.getDefault(this,'/login',{username:this.username,password:this.password}).then(function(result){
+        service.getDefault(this,'/api/login',{username:this.username,password:this.password}).then(function(result){
           this.mes = result.data
 
         },function(err){
