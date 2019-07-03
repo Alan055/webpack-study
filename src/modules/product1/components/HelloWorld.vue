@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <h1>event bus</h1>
     <div class="box">
       <div class="item">
         <label >用户名：</label>
