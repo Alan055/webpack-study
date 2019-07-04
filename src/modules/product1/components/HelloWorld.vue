@@ -45,7 +45,7 @@
     },
     methods: {
       login(){
-        service.getDefault(this,'/api/login',{username:this.username,password:md5(this.password)}).then(function(result){
+        service.postDefault(this,'/api/login',{username:this.username,password:md5(this.password)}).then(function(result){
           this.mes = result.data
 
         },function(err){
