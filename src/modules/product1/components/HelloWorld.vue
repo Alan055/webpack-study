@@ -17,6 +17,10 @@
         <button @click="register()">注册</button>
         <span>{{mes1}}</span>
       </div>
+      <div class="item">
+        <button @click="logout()">注销</button>
+        <span>{{mes2}}</span>
+      </div>
       <!--<c1></c1>-->
       <!--<c2></c2>-->
     </div>
@@ -41,6 +45,7 @@
         password: '',
         mes: '',
         mes1: '',
+        mes2: '',
       }
     },
     methods: {
@@ -53,8 +58,16 @@
         })
       },
       register(){
-        service.getDefault(this,'/api/register',{username:this.username,password:md5(this.password)}).then(function(result){
+        service.postDefault(this,'/api/register',{username:this.username,password:md5(this.password)}).then(function(result){
           this.mes1 = result.data
+
+        },function(err){
+          console.log(err)
+        })
+      },
+      logout(){
+        service.postDefault(this,'/api/logout',{username:this.username}).then(function(result){
+          this.mes2 = result.data
 
         },function(err){
           console.log(err)

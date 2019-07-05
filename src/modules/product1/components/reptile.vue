@@ -67,9 +67,13 @@
           obj.startDate = moment(this.date[0]).format("YYYY.MM.DD") + ' 00:00'
           obj.endDate = moment(this.date[1]).format("YYYY.MM.DD") + ' 23:59'
         }
-        service.getDefault(this, '/api/getReptile', obj).then(function (result) {
-          this.tableData = result.data.list
-          this.pagination.total = result.data.total
+        service.getDefault(this, '/api/reptile', obj).then(function (result) {
+          let res = result.data
+          if(res.code === 200){
+            this.tableData = res.data.list
+            this.pagination.total = res.data.total
+          }
+
 
         }, function (err) {
           console.log(err)

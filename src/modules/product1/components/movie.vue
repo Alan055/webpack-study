@@ -32,6 +32,8 @@
       </div>
     </div>
 
+    <div><span v-for="(v,i) in typeList" :key="i">{{v.label}}</span></div>
+    <div><span v-for="(v,i) in typeList" :key="i">{{v.total}}</span></div>
 
   </div>
 </template>
@@ -55,6 +57,7 @@
         date: [null, null], // 提问时间
         typeList: [],
         type: '',
+        typeTotal: []
       }
     },
     computed: {},
@@ -71,11 +74,14 @@
           obj.startDate = moment(this.date[0]).format("YYYY.MM.DD") + ' 00:00'
           obj.endDate = moment(this.date[1]).format("YYYY.MM.DD") + ' 23:59'
         }
-        service.getDefault(this, '/api/getMovie', obj).then(function (result) {
-          this.tableData = result.data.list
-          this.pagination.total = result.data.total
-          if(!this.typeList.length){
-            this.typeList = result.data.typeList.map(v=>({label:v.type_name ,value: v.id, total: v.total}))
+        service.postDefault(this, '/api/movie', obj).then(function (result) {
+          let res = result.data
+          if(res.code === 200){
+            this.tableData = res.data.list
+            this.pagination.total = res.data.total
+            // if(!this.typeList.length){
+            //   this.typeList = result.data.typeList.map(v=>({label:v.type_name ,value: v.id, total: v.total}))
+            // }
           }
         }, function (err) {
           console.log(err)
@@ -91,8 +97,13 @@
         this.findData()
       },
       findGroup(){
-        service.getDefault(this,'/api/getMovieType',{}).then(function(result){
-        	console.log(result)
+        service.getDefault(this,'/api/movieType',{}).then(function(result){
+          let res = result.data
+          if(res.code === 200){
+            if(!this.typeList.length){
+              this.typeList = res.data.map(v=>({label:v.type_name ,value: v.id, total: v.total}))
+            }
+          }
 
         },function(err){
         	console.log(err)
