@@ -31,9 +31,12 @@
         <Page :total="pagination.total" show-sizer @on-change="tableChange" @on-page-size-change="sizeChange"/>
       </div>
     </div>
+    <div class="box">
+      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{v.label}}</span></div>
+      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{v.total}}</span></div>
+      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{totalList[v.value]}}</span></div>
+    </div>
 
-    <div><span v-for="(v,i) in typeList" :key="i">{{v.label}}</span></div>
-    <div><span v-for="(v,i) in typeList" :key="i">{{v.total}}</span></div>
 
   </div>
 </template>
@@ -57,7 +60,7 @@
         date: [null, null], // 提问时间
         typeList: [],
         type: '',
-        typeTotal: []
+        totalList: []
       }
     },
     computed: {},
@@ -101,7 +104,8 @@
           let res = result.data
           if(res.code === 200){
             if(!this.typeList.length){
-              this.typeList = res.data.map(v=>({label:v.type_name ,value: v.id, total: v.total}))
+              this.typeList = res.data.typeList.map(v=>({label:v.type_name ,value: v.id, total: v.total}))
+              this.totalList = res.data.totalList
             }
           }
 
@@ -144,7 +148,7 @@
     }
     .table {
       position: relative;
-      height: ~"calc(100% - 162px)";
+      height: ~"calc(100% - 202px)";
       width: 1200px;
       margin: 0 auto;
       border: 1px solid #ccc;
@@ -232,6 +236,20 @@
           span{
             color: red;
           }
+        }
+      }
+    }
+    .box{
+
+      width: 1200px;
+      margin: 20px auto;
+      .cel{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        span{
+          width: 25%;
         }
       }
     }

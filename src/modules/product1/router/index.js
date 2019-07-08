@@ -10,5 +10,6 @@ export default new Router({
     {path: '/', name: 'HelloWorld', component: HelloWorld},
     {path: '/reptile', name: 'reptile', component: ()=>import ('./../components/reptile.vue')},
     {path: '/movie', name: 'movie', component: ()=>import ('./../components/movie.vue')},
+    {path: '/annotationRate', name: 'annotationRate', component: ()=>import ('./../components/annotationRate.vue')},
   ]
 })
