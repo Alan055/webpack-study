@@ -22,16 +22,46 @@
       </div>
     </div>
 
+    <div class="listBox" v-if="tableContent.length">
+      <div class="listTop"><span v-for="(v,i) in tableTop" :key="i">{{v}}</span></div>
+      <div class="listContent">
+        <div v-for="(v,i) in tableContent" :key="i">
+          <span>{{i+1}}</span>
+          <span>{{v.name}}</span>
+          <span>{{v.rate}}</span>
+          <span>{{v.codeNum}}</span>
+          <span>{{v.jsNum}}</span>
+          <span>{{v.noteNum}}</span>
+          <span>{{v.path}}</span>
+        </div>
+        <div>
+          <span>总计</span>
+          <span></span>
+          <span>{{(sum.noteNum/sum.codeNum*100).toFixed(2)}}%</span>
+          <span>{{sum.codeNum}}</span>
+          <span>{{sum.jsNum}}</span>
+          <span>{{sum.noteNum}}</span>
+          <span></span>
+        </div>
+      </div>
+
+    </div>
+
 
   </div>
 </template>
 
 <script>
+  // 	console[val.rate>=20 ? 'info' : 'warn'](`文件${val.name}：总JS有${val.codeNum}行、实际js有${val.jsNum}行、注释有${val.noteNum}行、注释率为${val.rate + '%'}、路径是${val.path}`)
+
   export default {
     data() {
       return {
         loadingStatus: false, // 上传中
         file: null, // 上传的文件数据
+        tableTop: ['序号','文件名','注释率','总代码行数','实际JS行数','注释行数','路径'],
+        tableContent: [],
+        sum: {}
       }
     },
     computed: {},
@@ -56,8 +86,11 @@
         tt.append('file', this.file, this.file.name)
         console.log(tt)
         service.postDefault(this, '/api/upload', tt, ).then(function (result) {
-          console.log(result)
-
+          let res = result.data
+          if (res.code === 200){
+            this.tableContent = res.data.list
+            this.sum = res.data.sum
+          }
           this.file = null;
           this.loadingStatus = false;
         }, function (err) {
@@ -85,6 +118,28 @@
     .upload {
       width: 200px;
       margin-right: 50px;
+    }
+    .listBox{
+      .listTop{
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span{
+          width: 25%;
+        }
+      }
+      .listContent{
+        >div{
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          span{
+            width: 25%;
+          }
+        }
+      }
     }
   }
 </style>
