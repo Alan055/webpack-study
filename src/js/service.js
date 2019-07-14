@@ -3,7 +3,7 @@
  */
 import Vue from 'vue'
 
-let rootPath='/yx/u/api/';//根路径
+let rootPath='/api';//根路径
 
 function get(context,url,params) {
 	return context.$http({
@@ -14,12 +14,13 @@ function get(context,url,params) {
 	})
 }
 //post方法
-function post(context,url,obj) {
-	return context.$http({
-		url:rootPath+url,
-		body:obj,
-		method:'post'
-	})
+async function post(context,url,obj) {
+ let result = await context.$http({
+    url: rootPath + url,
+    body: obj,
+    method: 'post'
+  })
+  return result.data
 }
 
 // getDefault

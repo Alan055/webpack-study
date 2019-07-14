@@ -16,6 +16,7 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
+
 // 这里是所有的样式loader 可以在这里设置全局的less、sass、stylus
 exports.cssLoaders = function (options) {
   options = options || {}
@@ -31,6 +32,30 @@ exports.cssLoaders = function (options) {
     loader: 'postcss-loader',
     options: {
       sourceMap: options.sourceMap
+    }
+  }
+
+  // less专属
+  function lessResourceLoader() {
+    var loaders = [
+      cssLoader,
+      'less-loader',
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: [
+            path.resolve(__dirname, `../src/modules/${open}/assets/less/global.less`)
+          ]
+        }
+      }
+    ];
+    if (options.extract) {
+      return ExtractTextPlugin.extract({
+        use: loaders,
+        fallback: 'vue-style-loader'
+      })
+    } else {
+      return ['vue-style-loader'].concat(loaders)
     }
   }
 
@@ -63,7 +88,7 @@ exports.cssLoaders = function (options) {
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
-    less: generateLoaders('less'),
+    less: lessResourceLoader('less'), // less专属
     sass: generateLoaders('sass', {indentedSyntax: true}),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),

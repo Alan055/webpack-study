@@ -14,6 +14,9 @@ const portfinder = require('portfinder')
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
+const argv = require('yargs').argv // 获取命令行输入的参数
+let open = argv.open // 获取从命令行中输入的open参数  一般是拿到指定入口或者指定出口时使用  因为我们一般不会启动所有的项目  或者打所有的包
+
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap, usePostCSS: true})
@@ -43,7 +46,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    }
+    },
   },
   plugins: [
     new webpack.DefinePlugin({

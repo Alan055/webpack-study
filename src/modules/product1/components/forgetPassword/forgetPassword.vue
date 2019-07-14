@@ -1,21 +1,17 @@
 <template>
-    <div class="login">
+    <div class="forgetPassword">
       <div class="form">
         <div class="item">
-          <label >用户名：</label>
-          <i-input v-model="username" placeholder="请输入用户名/邮箱" style="width: 200px" @on-enter="login"></i-input>
-        </div>
-        <div class="item">
-          <label >密码：</label>
-          <i-input v-model="password" placeholder="请输入密码" style="width: 200px" @on-enter="login"></i-input>
+          <label >邮箱：</label>
+          <i-input v-model="email" placeholder="请输入注册邮箱" style="width: 200px" @on-enter="submit"></i-input>
         </div>
         <div class="item error">
           <label v-if="errorInfo">错误信息：</label>
           <span class="errorInfo" v-if="errorInfo">{{errorInfo}}</span>
-          <span class="forget" @click="jumpRouter('/forgetPassword')">忘记密码</span>
+          <span class="forget"></span>
         </div>
         <div class="item">
-          <i-button type="primary" long @click="login">立即登录</i-button>
+          <i-button type="primary" long @click="submit">发送邮件</i-button>
         </div>
 
       </div>
@@ -23,48 +19,44 @@
 </template>
 
 <script>
-  import md5 from "md5";
-  import {mapState, mapMutations, mapActions} from 'vuex';
-
 
   export default {
-		data() {
-			return {
-        username: '',
-        password: '',
+    data() {
+      return {
+        email: '',
         errorInfo: '',
       }
-		},
-		computed: {},
-		watch: {},
-		methods: {
-		  ...mapMutations(['setUserInfo']),
-      ...mapActions(['logout']),
-		  login(){
-        service.post(this, '/login', {username:this.username,password: md5(this.password)}).then((res) => {
+    },
+    computed: {},
+    watch: {},
+    methods: {
+      submit(){
+        if(!this.regular.email.test(this.email)){ // 校验邮箱
+          return this.errorInfo = '邮箱号码错误！'
+        }
+        service.post(this, '/forgetPassword', {email:this.email}).then((res) => {
           if (res.code === 200) {
-            this.setUserInfo(res.data) // 将用户信息写入到vuex中
-            this.jumpRouter('/')
+            alert('请查看邮件！')
           } else {
             this.errorInfo = res.msg
           }
         })
       },
 
-		  init(){
-        this.logout(this) // 注销 进入登录页面就应该要将之前的账号注销掉
+      init(){
+
       }
     },
-		created() {
-		  this.init()
-		},
-		mounted() {
-		},
-	}
+    created() {
+      this.init()
+    },
+    mounted() {
+    },
+  }
 </script>
 
 <style lang='less' scoped>
-  .login{
+  .forgetPassword{
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -2,12 +2,15 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './../App'
+import store from './vuex/index'
 import router from './router/index'
 import iView from "iview";
 import 'iview/dist/styles/iview.css';
 
 Vue.use(iView);
 
+import plugin from "@/js/plugin";
+Vue.use(plugin)
 
 
 Vue.config.productionTip = false
@@ -19,9 +22,27 @@ Vue.use(resource);
 Vue.http.options.emulateJSON = true;
 Vue.http.options.crossOrigin = true;
 Vue.http.options.emulateHTTP = true;
+// resouce拦截器   必须在use后面加入
+Vue.http.interceptors.push(function (request, next) {
+  next((response) => {
+    // 如果返回的数据是-1  说明是未登录状态   某些有登录限制的页面不能进去  要跳出来
+    // if (response.data === -1) {
+    //   if (location.href.search(/lottery|userCenter/) > -1) {
+    //     this.$router.push({path: '/'})
+    //     console.log('未登录，拦截器拦截')
+    //   }
+    //   return
+    // }
+    if(response.status !== 200){
+      console.log(`${response.url} 接口报错了 状态码为：${response.status}`)
+      return
+    }else{
+      return response
+    }
 
-import service from "./../../js/service";
-
+  });
+})
+import service from "@/js/service";
 window.service = service
 
 Vue.prototype.$eventBus = new Vue()
@@ -30,6 +51,7 @@ Vue.prototype.$eventBus = new Vue()
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

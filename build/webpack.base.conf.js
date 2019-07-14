@@ -70,6 +70,7 @@ module.exports = {
       jQuery: "jquery",
       moment: "moment",
     }),
+
   ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue

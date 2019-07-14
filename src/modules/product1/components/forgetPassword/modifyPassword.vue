@@ -1,13 +1,9 @@
 <template>
-  <div class="register">
+  <div class="modifyPassword">
     <div class="form">
       <div class="item">
         <label >用户名：</label>
         <i-input v-model="username" placeholder="请输入用户名" style="width: 200px" @on-enter="submit"></i-input>
-      </div>
-      <div class="item">
-        <label >邮箱：</label>
-        <i-input v-model="email" placeholder="请输入邮箱" style="width: 200px" @on-enter="submit"></i-input>
       </div>
       <div class="item">
         <label >密码：</label>
@@ -20,7 +16,7 @@
       <div class="item error">
         <label v-if="errorInfo">错误信息：</label>
         <span class="errorInfo" v-if="errorInfo">{{errorInfo}}</span>
-        <span class="forget" @click="jumpRouter('/login')">已有账号</span>
+        <span class="forget"></span>
       </div>
       <div class="item">
         <i-button type="primary" long @click="submit">提交</i-button>
@@ -39,10 +35,12 @@
     data() {
       return {
         username: '',
-        email: '',
         password: '',
         passwordAgin: '',
         errorInfo: '',
+        email: '',
+        verifyCode: '',
+
       }
     },
     computed: {},
@@ -53,9 +51,6 @@
         if(!this.regular.username.test(this.username)){
           return this.errorInfo = '账号输入规则不正确'
         }
-        if(!this.regular.email.test(this.email)){
-          return this.errorInfo = '邮箱输入规则不正确'
-        }
         if(!this.regular.password.test(this.password)){
           return this.errorInfo = '密码输入规则不正确'
         }
@@ -64,17 +59,14 @@
         }
         return true
       },
-
-
-
       submit(){
-        // 校验
-        if(this.reg() !== true)  return
-        service.post(this, '/register', {username:this.username,password: md5(this.password),email:this.email}).then((res) => {
+        if(this.reg() !== true) return
+
+        service.post(this, '/modifyPassword', {username:this.username,passwordNext: md5(this.password),code: this.verifyCode, email: this.email}).then((res) => {
           if (res.code === 200) {
             console.log(res)
-
-            this.jumpRouter('/')
+            // this.jumpRouter('/')
+            alert('修改密码成功！')
           } else {
             this.errorInfo = res.msg
           }
@@ -82,7 +74,9 @@
       },
 
       init(){
-
+        // 这里一定要区分已经登录修改密码  和 忘记密码时的修改密码
+        this.email = this.$route.query.email
+        this.verifyCode = this.$route.query.verifyCode
       }
     },
     created() {
@@ -94,7 +88,7 @@
 </script>
 
 <style lang='less' scoped>
-  .register{
+  .modifyPassword{
     display: flex;
     flex-direction: column;
     align-items: center;
