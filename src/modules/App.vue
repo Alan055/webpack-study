@@ -119,7 +119,6 @@
     width: 100%;
     background: url("./product1/assets/img/homeBg.jpg") no-repeat;
     background-size: cover;
-
     .appBox {
       background: rgba(51, 51, 51, 0.5);
       height: 100%;
@@ -230,6 +229,14 @@
           margin: auto;
         }
       }
+    }
+
+
+
+
+
+    .ivu-select-dropdown{
+      .al_scorll();
     }
 
   }

@@ -11,7 +11,7 @@
       <DatePicker class="input" type="daterange" v-model="date" style="width: 200px"></DatePicker>
       <Button type="primary" class="input" @click="init()">查询</Button>
     </div>
-    <al_table class="table" :tableTop="tableTop" :pagination.sync="pagination" :init="findData">
+    <al_table class="table" :tableTop="tableTop" :class="{'tableTop1':userInfo.permission}" :pagination.sync="pagination" :init="findData">
       <div class="item" v-for="(v,i) in tableData" :key="i">
         <span>{{pagination.pageNumber*pagination.pageSize+(i+1)}}</span>
         <span>{{v.id}}</span>
@@ -22,14 +22,18 @@
         <span>{{v.create_time}}</span>
       </div>
     </al_table>
-
+    <div class="box" v-if="userInfo.permission">
+      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{v.label}}</span></div>
+      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{v.total}}</span></div>
+      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{totalList[v.value]}}</span></div>
+    </div>
   </div>
 </template>
 
 <script>
   import service from "@/js/service";
   import al_table from "@/components/pc/al_table.vue";
-
+  import {mapState, mapMutations, mapActions} from 'vuex';
 
   export default {
     components: {al_table},
@@ -50,7 +54,9 @@
         totalList: []
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(['userInfo']),
+    },
     watch: {},
     methods: {
       findData() {
@@ -133,7 +139,10 @@
       }
     }
     .table {
-      height: ~"calc(100% - 202px)";
+      height: ~"calc(100% - 102px)";
+      &.tableTop1{
+        height: ~"calc(100% - 202px)";
+      }
       .item {
         display: flex;
         justify-content: left;
@@ -185,7 +194,7 @@
       }
     }
     .box {
-      width: 1200px;
+      width: 100%;
       margin: 20px auto;
       .cel {
         width: 100%;
