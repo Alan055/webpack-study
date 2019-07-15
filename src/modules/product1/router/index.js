@@ -10,7 +10,11 @@ export default new Router({
     {path: '/', name: 'home', component: home}, // 首页
     {path: '/forum', name: 'forum', component: ()=>import ('./../components/forum/index')}, // 论坛
     {path: '/instance', name: 'instance', component: ()=>import ('./../components/instance/index')}, // 分享实例
-    {path: '/tools', name: 'tools', component: ()=>import ('./../components/tools/index')}, // 工具
+    {path: '/tools', name: 'tools', component: ()=>import ('./../components/tools/index'),children: [
+        {path: '/', name: 'tools_annotationRate', component: ()=>import ('./../components/tools/annotationRate')},
+        {path: '/tools/reptile', name: 'tools_reptile', component: ()=>import ('./../components/tools/reptile')},
+        {path: '/tools/movie', name: 'tools_movie', component: ()=>import ('./../components/tools/movie')},
+      ]}, // 工具
     {path: '/share', name: 'share', component: ()=>import ('./../components/share/index')}, // 我要分享
     {path: '/login', name: 'login', component: ()=>import ('./../components/login/index')}, // 登录
     {path: '/register', name: 'register', component: ()=>import ('./../components/register/index')}, // 注册
@@ -20,8 +24,5 @@ export default new Router({
 
 
 
-    {path: '/reptile', name: 'reptile', component: ()=>import ('./../components/reptile.vue')}, //
-    {path: '/movie', name: 'movie', component: ()=>import ('./../components/movie.vue')},
-    {path: '/annotationRate', name: 'annotationRate', component: ()=>import ('./../components/annotationRate.vue')},
   ]
 })

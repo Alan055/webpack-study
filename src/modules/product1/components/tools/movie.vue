@@ -11,44 +11,31 @@
       <DatePicker class="input" type="daterange" v-model="date" style="width: 200px"></DatePicker>
       <Button type="primary" class="input" @click="init()">查询</Button>
     </div>
-    <div class="table">
-      <div class="top">
-        <span v-for="(v,i) in tableTop" :key="i">{{v}}</span>
+    <al_table class="table" :tableTop="tableTop" :pagination.sync="pagination" :init="findData">
+      <div class="item" v-for="(v,i) in tableData" :key="i">
+        <span>{{pagination.pageNumber*pagination.pageSize+(i+1)}}</span>
+        <span>{{v.id}}</span>
+        <span :title="v.name">{{v.name}}</span>
+        <span>{{v.type}}</span>
+        <span>{{v.release_date}}</span>
+        <span><a :href="v.jump_url" target="_blank">{{v.jump_url}}</a></span>
+        <span>{{v.create_time}}</span>
       </div>
-      <div class="content">
-        <div class="item" v-for="(v,i) in tableData" :key="i">
-          <span>{{pagination.pageNumber*pagination.pageSize+(i+1)}}</span>
-          <span>{{v.id}}</span>
-          <span :title="v.name">{{v.name}}</span>
-          <span>{{v.type}}</span>
-          <span>{{v.release_date}}</span>
-          <span><a :href="v.jump_url" target="_blank">{{v.jump_url}}</a></span>
-          <span>{{v.create_time}}</span>
-        </div>
-      </div>
-      <div class="bottom">
-        <p>共 <span>{{pagination.total}}</span> 条数据</p>
-        <Page :total="pagination.total" show-sizer @on-change="tableChange" @on-page-size-change="sizeChange"/>
-      </div>
-    </div>
-    <div class="box">
-      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{v.label}}</span></div>
-      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{v.total}}</span></div>
-      <div class="cel"><span v-for="(v,i) in typeList" :key="i">{{totalList[v.value]}}</span></div>
-    </div>
-
+    </al_table>
 
   </div>
 </template>
 
 <script>
   import service from "@/js/service";
+  import al_table from "@/components/pc/al_table.vue";
 
 
   export default {
+    components: {al_table},
     data() {
       return {
-        tableTop: ['序号', 'id', '电影名', '类型', '上架时间', '页面地址', '爬虫时间' ],
+        tableTop: ['序号', 'id', '电影名', '类型', '上架时间', '页面地址', '爬虫时间'],
         tableData: [], // 表格数据
         pagination: { // 分页数据
           pageNumber: 0, // 当前是第几页
@@ -79,7 +66,7 @@
         }
         service.postDefault(this, '/api/movie', obj).then(function (result) {
           let res = result.data
-          if(res.code === 200){
+          if (res.code === 200) {
             this.tableData = res.data.list
             this.pagination.total = res.data.total
             // if(!this.typeList.length){
@@ -99,21 +86,20 @@
         this.pagination.pageSize = size
         this.findData()
       },
-      findGroup(){
-        service.getDefault(this,'/api/movieType',{}).then(function(result){
+      findGroup() {
+        service.getDefault(this, '/api/movieType', {}).then(function (result) {
           let res = result.data
-          if(res.code === 200){
-            if(!this.typeList.length){
-              this.typeList = res.data.typeList.map(v=>({label:v.type_name ,value: v.id, total: v.total}))
+          if (res.code === 200) {
+            if (!this.typeList.length) {
+              this.typeList = res.data.typeList.map(v => ({label: v.type_name, value: v.id, total: v.total}))
               this.totalList = res.data.totalList
             }
           }
 
-        },function(err){
-        	console.log(err)
+        }, function (err) {
+          console.log(err)
         })
       },
-
 
 
       init() {
@@ -140,115 +126,73 @@
       display: flex;
       justify-content: left;
       align-items: center;
-      width: 1200px;
+      width: 100%;
       margin: 0 auto;
       .input {
         margin-right: 10px;
       }
     }
     .table {
-      position: relative;
       height: ~"calc(100% - 202px)";
-      width: 1200px;
-      margin: 0 auto;
-      border: 1px solid #ccc;
-      .top {
-        height: 40px;
+      .item {
         display: flex;
         justify-content: left;
         align-items: center;
+        height: 40px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
         border-bottom: 1px solid #ccc;
-      }
-      .content {
-        /*display: flex;*/
-        /*flex-direction: column;*/
-        /*justify-content: flex-start;*/
-        /*align-items: center;*/
-        height: ~"calc(100% - 89px)";
-        overflow: auto;
-        .item {
-          display: flex;
-          justify-content: left;
-          align-items: center;
-          height: 40px;
-          width: 100%;
-          padding: 0;
-          margin: 0;
-          border-bottom: 1px solid #ccc;
-          &:last-child {
-            /*border-bottom: none;*/
-          }
-          span {
-            list-style: none;
+        span {
+          &:nth-child(3) {
+            text-align: left;
+            padding: 0 10px;
+            justify-content: left;
             overflow: hidden;
-            text-overflow:ellipsis;
+            text-overflow: ellipsis;
             white-space: pre-wrap;
-            &:nth-child(3){
-              text-align: left;
-              padding: 0 10px;
-              justify-content: left;
-              overflow: hidden;
-              text-overflow:ellipsis;
-              white-space: pre-wrap;
-            }
-            &:nth-child(6) a{
-              display: flex;
-              text-align: left;
-              justify-content: left;
-              align-items: center;
-              padding: 0 10px;
-              width: 100%;
-              height: 100%;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: pre-wrap;
-              word-break: break-all
-            }
+          }
+          &:nth-child(6) a {
+            display: flex;
+            text-align: left;
+            justify-content: left;
+            align-items: center;
+            padding: 0 10px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: pre-wrap;
+            word-break: break-all
           }
         }
       }
-      .top span, .content span {
-        width: 25%;
+      /deep/ .top span, .content span {
         display: flex;
         justify-content: center;
         align-items: center;
-        border-right: 1px solid #ccc;
         height: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        &:last-child {
-          border-right: none;
-        }
-      }
-      .bottom {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        height: 52px;
-        border-top: 1px solid #ccc;
-        background: #fff;
-        p{
-          margin: 0 10px;
-          span{
-            color: red;
-          }
-        }
+        &:nth-child(1) {width: 58px}
+        &:nth-child(2) {width: 50px}
+        &:nth-child(3) {width: 200px}
+        &:nth-child(4) {width: 100px}
+        &:nth-child(5) {width: 150px}
+        &:nth-child(6) {width: 300px}
+        &:nth-child(7) {width: 136px}
       }
     }
-    .box{
-
+    .box {
       width: 1200px;
       margin: 20px auto;
-      .cel{
+      .cel {
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        span{
+        span {
           width: 25%;
         }
       }

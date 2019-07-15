@@ -2,33 +2,24 @@
   <div class="reptile">
     <h1>爬虫数据展示</h1>
     <div class="select">
-      <label>标题：</label> <Input class="input" v-model="keyword" style="width:200px"/>
-      <label>回答数量：</label> <Input class="input" v-model="answerNum" type="number" style="width:200px"
+      <label>标题：</label> <Input class="input" v-model="keyword" placeholder="模糊查询" style="width:200px"/>
+      <label>回答数量：</label> <Input class="input" v-model="answerNum" type="number" placeholder="最少回答数量" style="width:200px"
                                   @on-enter="init()"/>
       <label>提问时间：</label>
-      <DatePicker class="input" type="daterange" v-model="date" style="width: 200px"></DatePicker>
+      <DatePicker class="input" type="daterange" v-model="date" style="width: 200px" placeholder="提问日期区间查询"></DatePicker>
       <Button type="primary" class="input" @click="init()">查询</Button>
     </div>
-    <div class="table">
-      <div class="top">
-        <span v-for="(v,i) in tableTop" :key="i">{{v}}</span>
+    <al_table class="table" :tableTop="tableTop" :pagination.sync="pagination" :init="findData">
+      <div class="item" v-for="(v,i) in tableData" :key="i">
+        <span>{{pagination.pageNumber*pagination.pageSize+(i+1)}}</span>
+        <span>{{v.id}}</span>
+        <span :title="v.title">{{v.title}}</span>
+        <span>{{v.answer}}</span>
+        <span>{{v.create_date}}</span>
+        <span><a :href="v.url" target="_blank">{{v.url}}</a></span>
+        <span>{{v.reptile_time}}</span>
       </div>
-      <div class="content">
-        <div class="item" v-for="(v,i) in tableData" :key="i">
-          <span>{{pagination.pageNumber*pagination.pageSize+(i+1)}}</span>
-          <span>{{v.id}}</span>
-          <span :title="v.title">{{v.title}}</span>
-          <span>{{v.answer}}</span>
-          <span>{{v.create_date}}</span>
-          <span><a :href="v.url" target="_blank">{{v.url}}</a></span>
-          <span>{{v.reptile_time}}</span>
-        </div>
-      </div>
-      <div class="bottom">
-        <p>共 <span>{{pagination.total}}</span> 条数据</p>
-        <Page :total="pagination.total" show-sizer @on-change="tableChange" @on-page-size-change="sizeChange"/>
-      </div>
-    </div>
+    </al_table>
 
 
   </div>
@@ -36,9 +27,13 @@
 
 <script>
   import service from "@/js/service";
+  import al_table from "@/components/pc/al_table.vue";
+
+
 
 
   export default {
+    components: {al_table},
     data() {
       return {
         tableTop: ['序号', 'id', '标题', '回答数量', '提问时间', '页面地址', '爬虫时间' ],
@@ -104,6 +99,7 @@
 <style lang='less' scoped>
   .reptile {
     height: 100%;
+    width: 100%;
     h1 {
       height: 42px;
     }
@@ -112,33 +108,14 @@
       display: flex;
       justify-content: left;
       align-items: center;
-      width: 1200px;
-      margin: 0 auto;
+      width: 100%;
       .input {
         margin-right: 10px;
       }
     }
     .table {
-      position: relative;
       height: ~"calc(100% - 162px)";
-      width: 1200px;
-      margin: 0 auto;
-      border: 1px solid #ccc;
-      .top {
-        height: 40px;
-        display: flex;
-        justify-content: left;
-        align-items: center;
-        border-bottom: 1px solid #ccc;
-      }
-      .content {
-        /*display: flex;*/
-        /*flex-direction: column;*/
-        /*justify-content: flex-start;*/
-        /*align-items: center;*/
-        height: ~"calc(100% - 89px)";
-        overflow: auto;
-        .item {
+      .item {
           display: flex;
           justify-content: left;
           align-items: center;
@@ -147,14 +124,7 @@
           padding: 0;
           margin: 0;
           border-bottom: 1px solid #ccc;
-          &:last-child {
-            /*border-bottom: none;*/
-          }
           span {
-            list-style: none;
-            overflow: hidden;
-            text-overflow:ellipsis;
-            white-space: pre-wrap;
             &:nth-child(3){
               text-align: left;
               padding: 0 10px;
@@ -178,37 +148,21 @@
             }
           }
         }
-      }
-      .top span, .content span {
-        width: 25%;
+      /deep/ .top span, .content span {
         display: flex;
         justify-content: center;
         align-items: center;
-        border-right: 1px solid #ccc;
         height: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        &:last-child {
-          border-right: none;
-        }
-      }
-      .bottom {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        height: 52px;
-        border-top: 1px solid #ccc;
-        background: #fff;
-        p{
-          margin: 0 10px;
-          span{
-            color: red;
-          }
-        }
+        &:nth-child(1){width: 58px;}
+        &:nth-child(2){width: 50px;}
+        &:nth-child(3){width: 300px;}
+        &:nth-child(4){width: 80px;}
+        &:nth-child(5){width: 120px;}
+        &:nth-child(6){width: 240px;}
+        &:nth-child(7){width: 100px;}
       }
     }
 

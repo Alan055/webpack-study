@@ -103,7 +103,6 @@
 <style lang="less">
   * {
     box-sizing: border-box;
-    font-size: 14px;
   }
 
   html, body {
@@ -136,7 +135,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        position: fixed;
+        z-index: 9;
         .left {
           display: flex;
           justify-content: left;
@@ -219,6 +219,7 @@
       }
 
       > .appBody {
+        padding-top: 100px;
         width: 100%;
         flex-grow: 1;
         overflow: auto;

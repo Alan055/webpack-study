@@ -6,8 +6,12 @@ import service from "@/js/service";
 
 export default new vuex.Store({
   state: {
-    isLogin: false,
-    userInfo: {},
+    isLogin: false, // 是否登录
+    userInfo: {}, // 用户信息
+
+    routerOne: {
+      tool: '/tools',
+    }
 
   },
   mutations: {

@@ -5,19 +5,16 @@
       <Upload class="upload" type="drag" :format="['zip']" action="/api/upload"
               :before-upload="handleUpload" :on-format-error="handleFormatError"
               :max-size="5">
-        <div style="padding: 20px 0">
-          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-          <p>上传文件</p>
+        <div style="padding: 8px 4px">
+          <!--<Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>-->
+          <p>点击或拖入此处，上传文件</p>
           <!--<Button icon="ios-cloud-upload-outline" v-if="!file"></Button>-->
           <p v-if="file">文件名为：{{ file.name }}</p>
         </div>
       </Upload>
 
-      <Upload  class="top" action="/api/upload" >
-        <Button icon="ios-cloud-upload-outline">Upload files</Button>
-      </Upload>
       <div v-if="file !== null">
-        <Button type="primary" @click="upload" :loading="loadingStatus">{{ loadingStatus ? 'Uploading' : '上传' }}
+        <Button type="primary" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '疯狂计算中' : '上传并计算' }}
         </Button>
       </div>
     </div>
@@ -27,12 +24,12 @@
       <div class="listContent">
         <div v-for="(v,i) in tableContent" :key="i">
           <span>{{i+1}}</span>
-          <span>{{v.name}}</span>
+          <span :title="v.name">{{v.name}}</span>
           <span>{{v.rate}}</span>
           <span>{{v.codeNum}}</span>
           <span>{{v.jsNum}}</span>
           <span>{{v.noteNum}}</span>
-          <span>{{v.path}}</span>
+          <span :title="v.path">{{v.path}}</span>
         </div>
         <div>
           <span>总计</span>
@@ -108,36 +105,76 @@
 
 <style lang='less' scoped>
   .annotationRate {
-    width: 1200px;
+    width: 100%;
+    height: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    >h1{
+      height: 42px;
+    }
     .top {
       display: flex;
       justify-content: left;
       align-items: center;
-    }
-    .upload {
-      width: 200px;
-      margin-right: 50px;
+      height: 64px;
+      .upload {
+        display: flex;
+        width: 200px;
+        margin-right: 50px;
+      }
     }
     .listBox{
+      width: 100%;
+      overflow: auto;
+      flex-grow: 1;
       .listTop{
+        background: @themeColor;
+        color: #fff;
         height: 36px;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         span{
-          width: 25%;
+          border-right: 1px solid #ccc;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          &:last-child{
+            border: none;
+          }
         }
       }
       .listContent{
+        height: ~"calc(100% - 36px)";
+        .al_scorll();
+        overflow: auto;
         >div{
           height: 36px;
           display: flex;
           align-items: center;
-          justify-content: center;
-          span{
-            width: 25%;
-          }
+          justify-content: flex-start;
+          flex-wrap: nowrap;
+          overflow: hidden;
+          span:nth-child(2){text-align: left}
+          span:nth-child(7){text-align: left}
+        }
+      }
+      .listTop, .listContent{
+        span:nth-child(1){width: 58px}
+        span:nth-child(2){width: 150px}
+        span:nth-child(3){width: 100px}
+        span:nth-child(4){width: 100px}
+        span:nth-child(5){width: 100px}
+        span:nth-child(6){width: 100px}
+        span:nth-child(7){width: 390px}
+        span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          padding: 0 5px;
         }
       }
     }
