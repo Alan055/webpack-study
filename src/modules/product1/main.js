@@ -26,13 +26,12 @@ Vue.http.options.emulateHTTP = true;
 Vue.http.interceptors.push(function (request, next) {
   next((response) => {
     // 如果返回的数据是-1  说明是未登录状态   某些有登录限制的页面不能进去  要跳出来
-    // if (response.data === -1) {
-    //   if (location.href.search(/lottery|userCenter/) > -1) {
-    //     this.$router.push({path: '/'})
-    //     console.log('未登录，拦截器拦截')
-    //   }
-    //   return
-    // }
+    if (response.data.code === -1) {
+      this.$store.commit('removeUserInfo') // 删除登录信息
+      this.$router.push({path: '/'})
+      console.log('未登录，拦截器拦截')
+      return
+    }
     if(response.status !== 200){
       console.log(`${response.url} 接口报错了 状态码为：${response.status}`)
       return

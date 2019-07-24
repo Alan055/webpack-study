@@ -77,7 +77,7 @@
       },
       // 拿到平台用户的数量  总的访问数量
       async getProjectInfo() {
-        let res = service.post(this, '/statistical', {})
+        let res = await service.post(this, '/statistical', {})
         if (res.code === 0) {
 
         } else {
@@ -95,6 +95,11 @@
       this.init()
     },
     mounted() {
+      setTimeout(()=>{console.log("132")})
+      Promise.all([]).then(()=>{console.log("456")})
+
+
+
       console.log(this.isLogin)
     },
   }
