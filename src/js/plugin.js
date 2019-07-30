@@ -61,7 +61,7 @@ export default {
     // 正则
     Vue.prototype.regular = {
       username: /^[a-zA-Z0-9_]{6,10}$/,
-      email: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+      email: /^.+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
       password: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$/,
       verifyCode: /^([0-9]){5}$/,
     }
